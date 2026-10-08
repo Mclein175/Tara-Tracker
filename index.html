@@ -1,0 +1,926 @@
+<!doctype html>
+<html lang="en-GB">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Dance Pilates Steps Sleep</title>
+<meta name="description" content="Tap a date to mark a Dance, Pilates, Steps or Sleep day.">
+<meta name="theme-color" content="#121417">
+<meta name="color-scheme" content="dark">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="My Tracker">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icons/apple-touch-icon.png">
+<link rel="icon" type="image/png" sizes="32x32" href="icons/favicon-32.png">
+<link rel="preload" href="fonts/big-shoulders-display-800.woff2" as="font" type="font/woff2" crossorigin>
+<style>
+@font-face{font-family:"Big Shoulders Display";font-style:normal;font-weight:800;font-display:swap;src:url("fonts/big-shoulders-display-800.woff2") format("woff2");}
+@font-face{font-family:"Barlow Semi Condensed";font-style:normal;font-weight:500;font-display:swap;src:url("fonts/barlow-semi-condensed-500.woff2") format("woff2");}
+@font-face{font-family:"Barlow Semi Condensed";font-style:normal;font-weight:700;font-display:swap;src:url("fonts/barlow-semi-condensed-700.woff2") format("woff2");}
+html{padding:env(safe-area-inset-top,0px) env(safe-area-inset-right,0px) env(safe-area-inset-bottom,0px) env(safe-area-inset-left,0px);}
+/* Palette: gym-floor rubber plus calibrated plate colours (red 25 kg, blue 20 kg, yellow 15 kg). */
+:root {
+  color-scheme: dark;
+  --floor: #121417;
+  --tile: #1c1f24;
+  --tile-2: #262a31;
+  --rim: #343a44;
+  --chalk: #f1f2f4;
+  --muted: #8c939e;
+  --faint: #555c67;
+  --accent: #ef3e42;
+  --on-accent: #ffffff;
+  --display: "Big Shoulders Display", "Arial Narrow", "Roboto Condensed", system-ui, sans-serif;
+  --ui: "Barlow Semi Condensed", system-ui, -apple-system, "Segoe UI", Roboto, Arial, sans-serif;
+  --gap: 6px;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+[hidden] {
+  display: none !important;
+}
+
+html {
+  height: 100%;
+  box-sizing: border-box;
+  background: var(--floor);
+  -webkit-text-size-adjust: 100%;
+  overscroll-behavior: none;
+}
+
+body {
+  height: 100%;
+  margin: 0;
+  background: var(--floor);
+  color: var(--chalk);
+  font: 500 16px/1.3 var(--ui);
+  -webkit-font-smoothing: antialiased;
+  overscroll-behavior: none;
+}
+
+button {
+  font: inherit;
+  color: inherit;
+  background: none;
+  border: 0;
+  padding: 0;
+  margin: 0;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: manipulation;
+}
+
+button:focus-visible {
+  outline: 2px solid var(--chalk);
+  outline-offset: 2px;
+}
+
+button:disabled {
+  cursor: default;
+}
+
+/* ---------- Frame ---------- */
+
+.app {
+  height: 100%;
+  min-height: 580px;
+  max-width: 540px;
+  margin: 0 auto;
+  padding-block: 10px 12px;
+  padding-inline: 16px;
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+/* ---------- Header ---------- */
+
+.top {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  min-height: 34px;
+}
+
+.seg {
+  display: inline-flex;
+  gap: 2px;
+  padding: 3px;
+  border-radius: 10px;
+  background: var(--tile);
+}
+
+.seg button {
+  height: 28px;
+  padding-inline: 14px;
+  border-radius: 7px;
+  font: 700 13px/1 var(--ui);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.seg button[aria-pressed="true"] {
+  background: var(--chalk);
+  color: var(--floor);
+}
+
+.small-btn {
+  flex: none;
+  height: 34px;
+  padding-inline: 12px;
+  border-radius: 9px;
+  box-shadow: inset 0 0 0 1px var(--rim);
+  font: 700 13px/1 var(--ui);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--chalk);
+}
+
+.head {
+  display: flex;
+  align-items: flex-end;
+  justify-content: space-between;
+  gap: 12px;
+}
+
+.title {
+  margin: 0;
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  font-weight: inherit;
+}
+
+.kicker {
+  font: 700 13px/1 var(--ui);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--muted);
+}
+
+.big {
+  font: 800 clamp(34px, 12vw, 50px) / 0.86 var(--display);
+  letter-spacing: 0.01em;
+  text-transform: uppercase;
+  white-space: nowrap;
+}
+
+.nav {
+  flex: none;
+  display: flex;
+  gap: 8px;
+}
+
+.nav button {
+  width: 44px;
+  height: 44px;
+  border-radius: 10px;
+  background: var(--tile);
+  display: grid;
+  place-items: center;
+}
+
+.nav button:disabled {
+  opacity: 0.3;
+}
+
+.nav svg {
+  width: 20px;
+  height: 20px;
+  fill: none;
+  stroke: var(--chalk);
+  stroke-width: 2.6;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+}
+
+/* ---------- Month ---------- */
+
+.main {
+  flex: 1 1 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+}
+
+.view {
+  flex: 1 1 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.dow {
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  gap: var(--gap);
+  font: 700 12px/1 var(--ui);
+  letter-spacing: 0.1em;
+  color: var(--muted);
+}
+
+.dow span {
+  padding-left: 8px;
+}
+
+.month {
+  flex: 1 1 0;
+  min-height: 250px;
+  display: grid;
+  grid-template-columns: repeat(7, minmax(0, 1fr));
+  grid-template-rows: repeat(var(--rows, 5), minmax(38px, 88px));
+  align-content: start;
+  gap: var(--gap);
+}
+
+.day {
+  position: relative;
+  display: flex;
+  align-items: flex-start;
+  justify-content: flex-start;
+  padding: 7px 0 0 8px;
+  border-radius: 8px;
+  background: var(--tile);
+  color: var(--chalk);
+  font: 800 21px/1 var(--display);
+  font-variant-numeric: tabular-nums;
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.day[aria-pressed="true"] {
+  background: var(--accent);
+  color: var(--on-accent);
+}
+
+/* Tick drawn from two borders, so it takes the text colour of the cell. */
+.day[aria-pressed="true"]::after {
+  content: "";
+  position: absolute;
+  right: 11px;
+  bottom: 11px;
+  width: 7px;
+  height: 13px;
+  border: solid currentColor;
+  border-width: 0 3px 3px 0;
+  transform: rotate(45deg);
+}
+
+.day.is-today {
+  box-shadow: inset 0 0 0 2px var(--chalk);
+}
+
+.day.is-today[aria-pressed="true"] {
+  box-shadow: inset 0 0 0 2px var(--on-accent);
+}
+
+.day:disabled {
+  background: transparent;
+  box-shadow: inset 0 0 0 1px var(--tile-2);
+  color: var(--faint);
+}
+
+.day:active:not(:disabled) {
+  transform: scale(0.94);
+}
+
+.day.pop {
+  animation: pop 0.24s ease-out;
+}
+
+@keyframes pop {
+  0% { transform: scale(0.9); }
+  60% { transform: scale(1.05); }
+  100% { transform: scale(1); }
+}
+
+/* ---------- Year: one continuous strip per year, weeks as columns ---------- */
+
+.year {
+  flex: 1 1 0;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 20px;
+  overflow-y: auto;
+  --c: 5px;
+  --g: 1.5px;
+}
+
+.yb {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.yb-head {
+  display: flex;
+  align-items: baseline;
+  justify-content: space-between;
+}
+
+.yb-year {
+  font: 800 24px/1 var(--display);
+}
+
+.yb-count {
+  font: 500 14px/1 var(--ui);
+  color: var(--muted);
+  font-variant-numeric: tabular-nums;
+}
+
+.yb-grid {
+  display: grid;
+  grid-template-columns: 24px repeat(54, var(--c));
+  grid-template-rows: 13px repeat(7, var(--c));
+  gap: var(--g);
+}
+
+.yb-grid .ml {
+  grid-row: 1;
+  text-align: left;
+  font: 600 10px/13px var(--ui);
+  color: var(--muted);
+  white-space: nowrap;
+}
+
+.yb-grid .dl {
+  grid-column: 1;
+  align-self: center;
+  font: 600 9px/1 var(--ui);
+  color: var(--faint);
+}
+
+.yb-grid i {
+  border-radius: 1px;
+  background: var(--tile-2);
+}
+
+.yb-grid i.on {
+  background: var(--accent);
+}
+
+.yb-grid i.fut {
+  background: var(--tile);
+}
+
+.yb-grid i.today {
+  box-shadow: 0 0 0 1px var(--chalk);
+}
+
+/* ---------- Footer ---------- */
+
+.foot {
+  display: flex;
+  flex-direction: column;
+  gap: 14px;
+}
+
+.note {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin: 0;
+  padding: 8px 8px 8px 12px;
+  min-height: 42px;
+  border-radius: 10px;
+  background: var(--tile);
+  font: 500 14px/1.25 var(--ui);
+  color: var(--muted);
+}
+
+.note b {
+  font-weight: 700;
+  color: var(--chalk);
+}
+
+.stats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px 12px;
+}
+
+.stats-cap {
+  grid-column: 1 / -1;
+  margin: 0;
+  font: 700 12px/1 var(--ui);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  color: var(--accent);
+}
+
+.stat {
+  min-width: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+}
+
+.stat b {
+  font: 800 38px/0.9 var(--display);
+  font-variant-numeric: tabular-nums;
+}
+
+.stat span {
+  font: 500 14px/1.15 var(--ui);
+  color: var(--muted);
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.habits {
+  display: grid;
+  grid-auto-flow: column;
+  grid-auto-columns: minmax(0, 1fr);
+  gap: 8px;
+}
+
+.habit {
+  height: 54px;
+  border-radius: 12px;
+  background: var(--tile);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 9px;
+  font: 700 16px/1 var(--ui);
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--chalk);
+  transition: background-color 0.15s ease, color 0.15s ease;
+}
+
+.habit[aria-pressed="true"] {
+  background: var(--c);
+  color: var(--on-c);
+}
+
+/* Four options: stack the plate over the label so long names fit. */
+.habits:has(> :nth-child(4)) .habit {
+  flex-direction: column;
+  gap: 6px;
+  height: 60px;
+  font-size: 14px;
+  letter-spacing: 0.05em;
+}
+
+/* A tiny weight plate: coloured disc with a centre hole. */
+.plate {
+  flex: none;
+  width: 14px;
+  height: 14px;
+  border-radius: 50%;
+  background: radial-gradient(circle, var(--tile) 0 2.5px, var(--c) 3px);
+}
+
+.habit[aria-pressed="true"] .plate {
+  background: radial-gradient(circle, var(--c) 0 2.5px, var(--on-c) 3px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .day,
+  .habit {
+    transition: none;
+  }
+  .day.pop {
+    animation: none;
+  }
+  .day:active:not(:disabled) {
+    transform: none;
+  }
+}
+
+</style>
+</head>
+<body>
+<div class="app" id="app" data-view="month">
+  <div class="note" id="demo" hidden>
+    <span><b>Example marks</b>, not saved.</span>
+    <button type="button" class="small-btn" id="demoClear">Start empty</button>
+  </div>
+
+  <header class="top">
+    <div class="bar">
+      <div class="seg" role="group" aria-label="View">
+        <button type="button" data-view="month" aria-pressed="true">Month</button>
+        <button type="button" data-view="year" aria-pressed="false">Year</button>
+      </div>
+      <button type="button" class="small-btn" id="todayBtn" hidden>Today</button>
+    </div>
+    <div class="head">
+      <h1 class="title"><span class="kicker" id="kicker"></span><span class="big" id="big"></span></h1>
+      <div class="nav">
+        <button type="button" id="prev" aria-label="Previous month">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M14.5 5.5 8 12l6.5 6.5"/></svg>
+        </button>
+        <button type="button" id="next" aria-label="Next month">
+          <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M9.5 5.5 16 12l-6.5 6.5"/></svg>
+        </button>
+      </div>
+    </div>
+  </header>
+
+  <main class="main">
+    <section class="view" id="monthView">
+      <div class="dow" aria-hidden="true"><span>M</span><span>T</span><span>W</span><span>T</span><span>F</span><span>S</span><span>S</span></div>
+      <div class="month" id="grid" role="group"></div>
+    </section>
+    <section class="view" id="yearView" hidden>
+      <div class="year" id="year"></div>
+    </section>
+  </main>
+
+  <footer class="foot">
+    <p class="note" id="notice" role="status" hidden></p>
+    <div class="stats" id="stats" aria-live="polite">
+      <p class="stats-cap" id="statsCap">Dance days</p>
+      <div class="stat"><b>0</b><span></span></div>
+      <div class="stat"><b>0</b><span></span></div>
+      <div class="stat"><b>0</b><span></span></div>
+    </div>
+    <div class="habits" role="group" aria-label="What you are marking">
+      <button type="button" class="habit" data-habit="dance" aria-pressed="true" style="--c:#ef3e42;--on-c:#ffffff"><i class="plate"></i>Dance</button>
+      <button type="button" class="habit" data-habit="pilates" aria-pressed="false" style="--c:#ffc428;--on-c:#17191c"><i class="plate"></i>Pilates</button>
+      <button type="button" class="habit" data-habit="steps" aria-pressed="false" style="--c:#2fbf71;--on-c:#0f1a14"><i class="plate"></i>Steps</button>
+      <button type="button" class="habit" data-habit="sleep" aria-pressed="false" style="--c:#3b6cf6;--on-c:#ffffff"><i class="plate"></i>Sleep</button>
+    </div>
+  </footer>
+</div>
+<script>
+(function () {
+  'use strict';
+
+  const PREVIEW = false; // the preview build flips this to show example marks
+
+  const CONFIG = {"key": "dance-pilates-steps-sleep:v1", "habits": [{"id": "dance", "label": "Dance", "color": "#ef3e42", "on": "#ffffff", "odds": [0.2, 0.6, 0.2, 0.6, 0.2, 0.4, 0.1]}, {"id": "pilates", "label": "Pilates", "color": "#ffc428", "on": "#17191c", "odds": [0.7, 0.1, 0.7, 0.1, 0.5, 0.2, 0.1]}, {"id": "steps", "label": "Steps", "color": "#2fbf71", "on": "#0f1a14", "odds": [0.75, 0.75, 0.75, 0.75, 0.75, 0.75, 0.75]}, {"id": "sleep", "label": "Sleep", "color": "#3b6cf6", "on": "#ffffff", "odds": [0.65, 0.65, 0.65, 0.65, 0.65, 0.65, 0.65]}]};
+  const KEY = CONFIG.key;
+  const HABITS = CONFIG.habits;
+  const MONTHS = ['January', 'February', 'March', 'April', 'May', 'June', 'July',
+    'August', 'September', 'October', 'November', 'December'];
+  const DAYS = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday'];
+  const DATE_RE = /^\d{4}-\d{2}-\d{2}$/;
+
+  const pad2 = (n) => (n < 10 ? '0' : '') + n;
+  const keyOf = (y, m, d) => y + '-' + pad2(m + 1) + '-' + pad2(d);
+  const daysIn = (y, m) => new Date(y, m + 1, 0).getDate();
+  const firstDow = (y, m) => (new Date(y, m, 1).getDay() + 6) % 7; // Monday = 0
+  const labelOf = (id) => HABITS.find((h) => h.id === id).label;
+  const emptyData = () => Object.fromEntries(HABITS.map((h) => [h.id, new Set()]));
+
+  const $ = (id) => document.getElementById(id);
+  const el = {
+    app: $('app'),
+    demo: $('demo'),
+    demoClear: $('demoClear'),
+    todayBtn: $('todayBtn'),
+    kicker: $('kicker'),
+    big: $('big'),
+    prev: $('prev'),
+    next: $('next'),
+    monthView: $('monthView'),
+    grid: $('grid'),
+    yearView: $('yearView'),
+    year: $('year'),
+    notice: $('notice'),
+    cap: $('statsCap'),
+    stats: Array.from(document.querySelectorAll('#stats .stat')),
+    viewBtns: Array.from(document.querySelectorAll('.seg button')),
+    habitBtns: Array.from(document.querySelectorAll('.habits button')),
+  };
+
+  let now = {};
+  function readToday() {
+    const t = new Date();
+    now = { y: t.getFullYear(), m: t.getMonth(), d: t.getDate() };
+    now.key = keyOf(now.y, now.m, now.d);
+  }
+  readToday();
+
+  const state = { habit: HABITS[0].id, view: 'month', y: now.y, m: now.m, demo: false };
+  let data = emptyData();
+
+  /* ---------- Storage (this browser only) ---------- */
+
+  function load() {
+    let raw;
+    try {
+      raw = localStorage.getItem(KEY);
+    } catch (e) {
+      return { ok: false, data: null };
+    }
+    if (raw === null) return { ok: true, data: null };
+    const d = emptyData();
+    try {
+      const obj = JSON.parse(raw);
+      HABITS.forEach((h) => {
+        const list = obj && Array.isArray(obj[h.id]) ? obj[h.id] : [];
+        list.forEach((k) => {
+          if (typeof k === 'string' && DATE_RE.test(k)) d[h.id].add(k);
+        });
+      });
+    } catch (e) {
+      // Keep an unreadable copy rather than overwriting it on the next save.
+      try { localStorage.setItem(KEY + ':unreadable', raw); } catch (e2) { /* ignore */ }
+    }
+    return { ok: true, data: d };
+  }
+
+  function save() {
+    if (state.demo) return;
+    const obj = { v: 1 };
+    HABITS.forEach((h) => { obj[h.id] = Array.from(data[h.id]).sort(); });
+    try {
+      localStorage.setItem(KEY, JSON.stringify(obj));
+      showNotice('');
+    } catch (e) {
+      showNotice('This browser is blocking storage, so marks will not be kept.');
+    }
+  }
+
+  function showNotice(msg) {
+    el.notice.textContent = msg;
+    el.notice.hidden = !msg;
+  }
+
+  /* Example marks for the preview only, from last September up to yesterday. */
+  function exampleData() {
+    const d = emptyData();
+    let seed = 0x2f6b1c3d;
+    const rand = () => {
+      seed = (seed + 0x6d2b79f5) | 0;
+      let t = Math.imul(seed ^ (seed >>> 15), 1 | seed);
+      t = (t + Math.imul(t ^ (t >>> 7), 61 | t)) ^ t;
+      return ((t ^ (t >>> 14)) >>> 0) / 4294967296;
+    };
+    for (let t = new Date(now.y - 1, 8, 1); ; t.setDate(t.getDate() + 1)) {
+      const k = keyOf(t.getFullYear(), t.getMonth(), t.getDate());
+      if (k >= now.key) break;
+      const dow = (t.getDay() + 6) % 7;
+      HABITS.forEach((h) => { if (rand() < h.odds[dow]) d[h.id].add(k); });
+    }
+    return d;
+  }
+
+  /* ---------- Rendering ---------- */
+
+  function render() {
+    const isMonth = state.view === 'month';
+    el.app.dataset.habit = state.habit;
+    const h = HABITS.find((x) => x.id === state.habit);
+    el.app.style.setProperty('--accent', h.color);
+    el.app.style.setProperty('--on-accent', h.on);
+    el.app.dataset.view = state.view;
+    el.viewBtns.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.view === state.view)));
+    el.habitBtns.forEach((b) => b.setAttribute('aria-pressed', String(b.dataset.habit === state.habit)));
+    el.demo.hidden = !state.demo;
+
+    el.monthView.hidden = !isMonth;
+    el.yearView.hidden = isMonth;
+    el.kicker.textContent = isMonth ? String(state.y) : 'Year';
+    el.big.textContent = isMonth ? MONTHS[state.m] : String(state.y);
+    el.prev.setAttribute('aria-label', isMonth ? 'Previous month' : 'Previous year');
+    el.next.setAttribute('aria-label', isMonth ? 'Next month' : 'Next year');
+
+    const shown = isMonth ? state.y * 12 + state.m : state.y;
+    const current = isMonth ? now.y * 12 + now.m : now.y;
+    el.next.disabled = shown >= current;
+    el.todayBtn.hidden = shown === current;
+
+    if (isMonth) renderMonth();
+    else renderYear();
+    renderStats();
+  }
+
+  function renderMonth() {
+    const y = state.y;
+    const m = state.m;
+    const set = data[state.habit];
+    const off = firstDow(y, m);
+    const dim = daysIn(y, m);
+    el.grid.style.setProperty('--rows', Math.ceil((off + dim) / 7));
+    el.grid.setAttribute('aria-label', labelOf(state.habit) + ', ' + MONTHS[m] + ' ' + y);
+
+    let html = '';
+    for (let i = 0; i < off; i++) html += '<span class="pad"></span>';
+    for (let d = 1; d <= dim; d++) {
+      const k = keyOf(y, m, d);
+      const isToday = k === now.key;
+      const future = k > now.key;
+      html += '<button type="button" class="day' + (isToday ? ' is-today' : '') + '"' +
+        ' data-key="' + k + '" aria-pressed="' + set.has(k) + '"' + (future ? ' disabled' : '') +
+        ' aria-label="' + DAYS[(off + d - 1) % 7] + ' ' + d + ' ' + MONTHS[m] + (isToday ? ', today' : '') + '">' +
+        d + '</button>';
+    }
+    el.grid.innerHTML = html;
+  }
+
+  function renderYear() {
+    const set = data[state.habit];
+    const name = labelOf(state.habit).toLowerCase();
+    let html = '';
+    for (let yr = state.y; yr > state.y - 3; yr--) {
+      const off = firstDow(yr, 0);
+      let labels = '';
+      let cells = '';
+      let count = 0;
+      let i = 0;
+      for (let m = 0; m < 12; m++) {
+        const dim = daysIn(yr, m);
+        for (let d = 1; d <= dim; d++, i++) {
+          const k = keyOf(yr, m, d);
+          const pos = i + off;
+          const col = Math.floor(pos / 7) + 2;
+          const row = (pos % 7) + 2;
+          if (d === 1) {
+            labels += '<button type="button" class="ml" data-y="' + yr + '" data-m="' + m + '"' +
+              ' style="grid-column:' + col + ' / span 4" aria-label="Open ' + MONTHS[m] + ' ' + yr + '">' +
+              MONTHS[m].slice(0, 3) + '</button>';
+          }
+          let cls = '';
+          if (set.has(k)) { cls = 'on'; count++; } else if (k > now.key) cls = 'fut';
+          if (k === now.key) cls += ' today';
+          cells += '<i data-y="' + yr + '" data-m="' + m + '"' + (cls ? ' class="' + cls.trim() + '"' : '') +
+            ' style="grid-area:' + row + ' / ' + col + '"></i>';
+        }
+      }
+      html += '<section class="yb"><div class="yb-head"><span class="yb-year">' + yr + '</span>' +
+        '<span class="yb-count">' + count + ' ' + name + ' day' + (count === 1 ? '' : 's') + '</span></div>' +
+        '<div class="yb-grid">' +
+        '<span class="dl" style="grid-area:2 / 1">Mon</span><span class="dl" style="grid-area:4 / 1">Wed</span>' +
+        '<span class="dl" style="grid-area:6 / 1">Fri</span><span class="dl" style="grid-area:8 / 1">Sun</span>' +
+        labels + cells + '</div></section>';
+    }
+    el.year.innerHTML = html;
+    sizeYear();
+  }
+
+  /* Size the squares so 54 week columns fill the screen width. */
+  function sizeYear() {
+    if (state.view !== 'year') return;
+    const W = el.year.clientWidth;
+    if (!W) return;
+    const c = Math.floor(Math.max(3, Math.min(14, (W - 24 - 54 * 1.5) / 54)) * 4) / 4;
+    el.year.style.setProperty('--c', c + 'px');
+  }
+
+  function renderStats() {
+    const set = data[state.habit];
+    const yPrefix = state.y + '-';
+    const mPrefix = keyOf(state.y, state.m, 1).slice(0, 8);
+    let inYear = 0;
+    let inMonth = 0;
+    set.forEach((k) => {
+      if (k.startsWith(yPrefix)) {
+        inYear++;
+        if (k.startsWith(mPrefix)) inMonth++;
+      }
+    });
+    el.cap.textContent = labelOf(state.habit) + ' days';
+    const items = state.view === 'month'
+      ? [[inMonth, 'in ' + MONTHS[state.m]], [inYear, 'in ' + state.y], [set.size, 'total']]
+      : [[inYear, 'in ' + state.y], [set.size, 'total']];
+    el.stats.forEach((s, i) => {
+      const it = items[i];
+      s.hidden = !it;
+      if (it) {
+        s.firstElementChild.textContent = it[0];
+        s.lastElementChild.textContent = it[1];
+      }
+    });
+  }
+
+  /* ---------- Input ---------- */
+
+  el.grid.addEventListener('click', (e) => {
+    const b = e.target.closest('.day');
+    if (!b || b.disabled) return;
+    const k = b.dataset.key;
+    const set = data[state.habit];
+    const on = !set.has(k);
+    if (on) set.add(k);
+    else set.delete(k);
+    b.setAttribute('aria-pressed', String(on));
+    b.classList.remove('pop');
+    void b.offsetWidth; // restart the animation
+    b.classList.add('pop');
+    save();
+    renderStats();
+  });
+
+  el.grid.addEventListener('animationend', (e) => e.target.classList.remove('pop'));
+
+  el.year.addEventListener('click', (e) => {
+    const t = e.target.closest('[data-m]');
+    if (!t) return;
+    state.y = Number(t.dataset.y);
+    state.m = Number(t.dataset.m);
+    state.view = 'month';
+    render();
+  });
+
+  el.viewBtns.forEach((b) => b.addEventListener('click', () => {
+    state.view = b.dataset.view;
+    render();
+  }));
+
+  el.habitBtns.forEach((b) => b.addEventListener('click', () => {
+    state.habit = b.dataset.habit;
+    render();
+  }));
+
+  function step(dir) {
+    if (state.view === 'month') {
+      const t = state.y * 12 + state.m + dir;
+      state.y = Math.floor(t / 12);
+      state.m = t - state.y * 12;
+    } else {
+      state.y += dir;
+    }
+    render();
+  }
+
+  el.prev.addEventListener('click', () => step(-1));
+  el.next.addEventListener('click', () => step(1));
+
+  el.todayBtn.addEventListener('click', () => {
+    state.y = now.y;
+    state.m = now.m;
+    render();
+  });
+
+  el.demoClear.addEventListener('click', () => {
+    state.demo = false;
+    data = emptyData();
+    save();
+    render();
+  });
+
+  /* Keep "today" right if the app stays open past midnight. */
+  function checkDay() {
+    const before = now;
+    readToday();
+    if (now.key === before.key) return;
+    if (state.y === before.y && (state.view === 'year' || state.m === before.m)) {
+      state.y = now.y;
+      state.m = now.m;
+    }
+    render();
+  }
+
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) checkDay();
+  });
+  window.addEventListener('focus', checkDay);
+  window.addEventListener('pageshow', checkDay);
+  window.addEventListener('resize', sizeYear);
+  setInterval(checkDay, 60000);
+  document.addEventListener('touchstart', () => {}, { passive: true }); // enables :active on iOS
+
+  /* ---------- Start ---------- */
+
+  const loaded = load();
+  if (!loaded.ok && !PREVIEW) showNotice('This browser is blocking storage, so marks will not be kept.');
+  if (loaded.data) {
+    data = loaded.data;
+  } else if (PREVIEW) {
+    state.demo = true;
+    data = exampleData();
+  }
+  render();
+})();
+
+
+</script>
+<script>
+if ('serviceWorker' in navigator) {
+  window.addEventListener('load', function () {
+    navigator.serviceWorker.register('sw.js').catch(function () {});
+  });
+}
+if (navigator.storage && navigator.storage.persist) {
+  navigator.storage.persist().catch(function () {});
+}
+</script>
+</body>
+</html>
